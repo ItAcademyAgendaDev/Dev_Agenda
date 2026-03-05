@@ -1,17 +1,31 @@
 package org.itacademy;
 
+import org.itacademy.repository.AgendaRepository;
+import org.itacademy.repository.CreateAgendaTables;
+import org.itacademy.repository.DatabaseConnectionFactory;
+import org.itacademy.repository.JdbcAgendaRepository;
+
+import java.sql.Connection;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        DatabaseConnectionFactory factory = new DatabaseConnectionFactory(
+                        "jdbc:mysql://localhost:3315/agenda_db",
+                        "root",
+                        "root_password"
+        );
+        Connection connection = factory.createConnection();
+
+        CreateAgendaTables createAgendaTables = new CreateAgendaTables(connection);
+
+        createAgendaTables.createTables();
+
+        AgendaRepository repository = new JdbcAgendaRepository(connection);
+
+
+
     }
 }
