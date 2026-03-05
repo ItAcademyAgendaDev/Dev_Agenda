@@ -1,29 +1,38 @@
 package org.itacademy;
 
-import org.itacademy.repository.AgendaRepository;
-import org.itacademy.repository.CreateAgendaTables;
-import org.itacademy.repository.DatabaseConnectionFactory;
-import org.itacademy.repository.JdbcAgendaRepository;
+import org.itacademy.infrastructure.DatabaseConnectionFactory;
+import org.itacademy.infrastructure.DatabaseMigration;
+import org.itacademy.infrastructure.JdbcTaskRepository;
+import org.itacademy.input.ConsoleInputReader;
+import org.itacademy.input.InputReader;
+import org.itacademy.model.task.controller.MenuTask;
+import org.itacademy.model.task.service.TaskService;
 
 import java.sql.Connection;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        InputReader scanner = new ConsoleInputReader();
 
-        DatabaseConnectionFactory factory = new DatabaseConnectionFactory(
-                        "jdbc:mysql://localhost:3315/agenda_db",
-                        "root",
-                        "root_password"
-        );
-        Connection connection = factory.createConnection();
 
-        CreateAgendaTables createAgendaTables = new CreateAgendaTables(connection);
+        String url = "jdbc:mysql://localhost:3315/agenda_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+        String user = "root";
+        String password = "root_password";
 
-        createAgendaTables.createTables();
 
-        AgendaRepository repository = new JdbcAgendaRepository(connection);
+        DatabaseMigration.migrate(url, user, password); //se crea la conexión para crear las tablas
+
+        Connection connection = DatabaseConnectionFactory.createConnection(url, user, password); // se crea la conexión para hacer consultas
+
+        JdbcTaskRepository taskRepository = new JdbcTaskRepository(connection); // paso la conexión a mis repositorios (Task, Note, Event)
+
+        //Esto podría ir dentro de un menú global
+        TaskService taskService = new TaskService(taskRepository);
+        MenuTask menuTask = new MenuTask(scanner, taskService);
+        menuTask.createTask();
+
+
+
 
 
 
