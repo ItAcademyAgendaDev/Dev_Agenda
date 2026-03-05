@@ -1,15 +1,21 @@
 package org.itacademy.repository;
 
-import org.itacademy.model.Task;
+import org.itacademy.model.Agenda;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface TaskRepository {
+public interface AgendaRepository {
 
-    void save(Task task);
+    Agenda save(Agenda agenda);
 
-    Optional<Task> findById(UUID id);
+    Optional<Agenda> findById(Long id);
 
-    void markAsCompleted(UUID id);
+    List<Agenda> findAll();
+
+    Agenda update(Agenda agenda);
+
+    void delete(Long id);
 }
+ 
