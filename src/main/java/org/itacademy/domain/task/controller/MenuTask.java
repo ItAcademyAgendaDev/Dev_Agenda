@@ -32,4 +32,8 @@ public record MenuTask(InputReader scanner, TaskService taskService) {
             allTask.forEach(System.out::println);
         }
     }
+
+    public void markAsCompleted() {
+        taskService.markAsCompleted((long) scanner.readInt("Enter the task id: "));
+    }
 }
