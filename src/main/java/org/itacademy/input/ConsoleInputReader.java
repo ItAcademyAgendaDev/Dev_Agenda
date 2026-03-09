@@ -30,15 +30,15 @@ public class ConsoleInputReader implements InputReader {
     @Override
     public boolean readYesNo(String message) {
         while (true) {
-            System.out.print(message + " (s/n): ");
+            System.out.print(message + " (y/n): ");
             String input = scanner.nextLine().trim().toLowerCase();
 
-            if (input.equals("s")) {
+            if (input.equals("y")) {
                 return true;
             } else if (input.equals("n")) {
                 return false;
             } else {
-                System.out.println("Invalid option. Please enter 's' or 'n'.");
+                System.out.println("Invalid option. Please enter 'y' or 'n'.");
             }
         }
     }
