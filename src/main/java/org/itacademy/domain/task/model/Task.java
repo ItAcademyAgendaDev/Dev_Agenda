@@ -15,11 +15,29 @@ public class Task {
     public Task(String title, String description, LocalDate deadline, Priority priority) {
         this.title = title;
         this.description = description;
-        this.creationDate = LocalDate.now();
         this.deadline = deadline;
         this.priority = priority;
         this.status = Status.NOT_COMPLETED;
     }
+
+    public Task(
+            Long id,
+            String title,
+            String description,
+            LocalDate creationDate,
+            LocalDate deadline,
+            Priority priority,
+            Status status
+    ) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.creationDate = creationDate;
+        this.deadline = deadline;
+        this.priority = priority;
+        this.status = status;
+    }
+
 
     public Long getId() {
         return id;
@@ -47,10 +65,6 @@ public class Task {
 
     public LocalDate getCreationDate() {
         return creationDate;
-    }
-
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
     }
 
     public LocalDate getDeadline() {
