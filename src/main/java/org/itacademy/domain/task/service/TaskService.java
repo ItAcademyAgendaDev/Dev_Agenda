@@ -1,7 +1,9 @@
 package org.itacademy.domain.task.service;
 
 
+import org.itacademy.domain.task.exception.TaskAlreadyCompletedException;
 import org.itacademy.domain.task.exception.TaskNotFoundException;
+import org.itacademy.domain.task.model.Status;
 import org.itacademy.domain.task.model.Task;
 import org.itacademy.domain.task.repository.TaskRepository;
 
@@ -18,10 +20,15 @@ public record TaskService(TaskRepository taskRepository) {
     }
 
     public void markAsCompleted(Long id) {
-        try{
-            Task foundTask = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException("Task not found"));
-        }catch(TaskNotFoundException ex){
-            System.out.println(ex.getMessage());
+
+        Task foundTask = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+
+        if (foundTask.getStatus() == Status.COMPLETED) {
+            throw new TaskAlreadyCompletedException("Task already completed");
         }
+
+        foundTask.setStatus(Status.COMPLETED);
+        taskRepository.update(foundTask);
     }
 }

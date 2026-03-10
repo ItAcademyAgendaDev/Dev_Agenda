@@ -81,6 +81,27 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
         return tasks;
     }
 
+    @Override
+    public void update(Task task) {
+        String sql = "UPDATE task SET title = ?, description = ?, deadline = ?, priority = ?, status = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, task.getTitle());
+            stmt.setString(2, task.getDescription());
+            stmt.setObject(3, task.getDeadline());
+            stmt.setString(4, task.getPriority().name());
+            stmt.setString(5, task.getStatus().name());
+            stmt.setLong(6, task.getId());
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Updating task failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating task with ID: " + task.getId(), e);
+        }
+    }
+
     private Task mapRow(ResultSet rs) throws SQLException {
 
         return new Task(rs.getLong("id"), rs.getString("title"), rs.getString("description"), rs.getObject("creation_date", LocalDate.class), rs.getObject("deadline", LocalDate.class), Priority.valueOf(rs.getString("priority")), Status.valueOf(rs.getString("status")));
