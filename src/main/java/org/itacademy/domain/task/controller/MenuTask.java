@@ -25,13 +25,11 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
     }
 
     public void getTasks() {
-        List<Task> allTask = TASKSERVICE.listTasks();
-        if (allTask.isEmpty()) {
-            System.out.println("There are no tasks in the system!");
-        } else {
-            System.out.println("PRINTING TASK...");
-            allTask.forEach(System.out::println);
-        }
+        printTasks("ALL TASKS", TASKSERVICE.listTasks(), "There are no tasks in the system!");
+    }
+
+    public void getCompletedTasks() {
+        printTasks("COMPLETED TASKS", TASKSERVICE.listCompletedTasks(), "There are no completed tasks in the system!");
     }
 
     public void markAsCompleted() {
@@ -44,4 +42,15 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
             System.out.println(ex.getMessage());
         }
     }
+    private void printTasks(String title, List<Task> tasks, String emptyMessage) {
+        if (tasks == null || tasks.isEmpty()) {
+            System.out.println("\n⚠️ " + emptyMessage);
+            return;
+        }
+
+        System.out.println("\n=== " + title + " ===");
+        tasks.forEach(System.out::println);
+        System.out.println("====================\n");
+    }
+
 }

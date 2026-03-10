@@ -31,4 +31,8 @@ public record TaskService(TaskRepository taskRepository) {
         foundTask.setStatus(Status.COMPLETED);
         taskRepository.update(foundTask);
     }
+
+    public List<Task> listCompletedTasks() {
+        return taskRepository.findByStatus();
+    }
 }
