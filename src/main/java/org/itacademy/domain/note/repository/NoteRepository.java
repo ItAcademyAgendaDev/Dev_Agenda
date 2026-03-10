@@ -1,14 +1,13 @@
-package org.itacademy.model.note.repository;
+package org.itacademy.domain.note.repository;
 
-import org.itacademy.model.note.model.Note;
+import org.itacademy.domain.note.model.Note;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NoteRepository {
     Note save(Note note);
-    Optional<Note> findById(Long id);
     List<Note> findAll();
+    Note findById(Long id);
     boolean update(Note note);
     boolean deleteById(Long id);
 }

@@ -1,4 +1,4 @@
-package org.itacademy.model.note.model;
+package org.itacademy.domain.note.model;
 
 import java.time.LocalDateTime;
 
@@ -25,28 +25,28 @@ public class Note {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
     public Long getTaskId() {
         return taskId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void setTaskId(Long taskId) {
@@ -55,11 +55,19 @@ public class Note {
 
     @Override
     public String toString() {
-        return "Note{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", creationDate=" + creationDate +
-                ", taskId=" + taskId +
-                '}';
+        return String.format(
+                """
+                NOTE [#%d]
+                ---------------------------
+                Task ID:     %d
+                Created:     %s
+                Description: %s
+                ---------------------------
+                """,
+                id,
+                taskId,
+                creationDate,
+                description
+        );
     }
 }

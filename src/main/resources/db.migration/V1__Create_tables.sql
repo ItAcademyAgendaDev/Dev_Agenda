@@ -1,9 +1,0 @@
-CREATE TABLE IF NOT EXISTS task(
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    description VARCHAR(255),
-    creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deadline DATETIME,
-    priority VARCHAR(20),
-    status VARCHAR(20)
-);
