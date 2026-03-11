@@ -1,7 +1,6 @@
 package org.itacademy.domain.task.repository;
 
 
-import org.itacademy.domain.task.model.Status;
 import org.itacademy.domain.task.model.Task;
 
 import java.util.List;
@@ -15,4 +14,6 @@ public interface TaskRepository {
     Optional<Task> findById(Long id);
 
     void update(Task task);
+
+    List<Task> findByStatus();
 }

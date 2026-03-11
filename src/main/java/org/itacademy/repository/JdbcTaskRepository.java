@@ -102,6 +102,30 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
         }
     }
 
+    public List<Task> findByStatus() {
+
+        List<Task> tasks = new ArrayList<>();
+
+        String sql = "SELECT * FROM task WHERE status = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, Status.COMPLETED.name());
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                tasks.add(mapRow(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving completed tasks", e);
+        }
+
+        return tasks;
+    }
+
+
     private Task mapRow(ResultSet rs) throws SQLException {
 
         return new Task(rs.getLong("id"), rs.getString("title"), rs.getString("description"), rs.getObject("creation_date", LocalDate.class), rs.getObject("deadline", LocalDate.class), Priority.valueOf(rs.getString("priority")), Status.valueOf(rs.getString("status")));
