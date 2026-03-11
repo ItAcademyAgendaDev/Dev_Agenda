@@ -125,6 +125,21 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
         return tasks;
     }
 
+    @Override
+    public void deleteById(Long id) {
+
+        String sql = "DELETE FROM task WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting task", e);
+        }
+    }
 
     private Task mapRow(ResultSet rs) throws SQLException {
 
