@@ -2,6 +2,8 @@ package org.itacademy.domain.task.controller;
 
 
 import org.itacademy.domain.task.controller.builder.TaskBuilder;
+import org.itacademy.domain.task.dto.TaskDtoRequest;
+import org.itacademy.domain.task.dto.TaskDtoResponse;
 import org.itacademy.domain.task.exception.TaskAlreadyCompletedException;
 import org.itacademy.domain.task.exception.TaskNotFoundException;
 import org.itacademy.domain.task.model.Task;
@@ -13,13 +15,15 @@ import java.util.List;
 public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
 
     public void createTask() {
-        Task createdTask = TASKSERVICE.createTask(new TaskBuilder(SCANNER)
-                        .withTitle()
-                        .withDescription()
-                        .withDeadline()
-                        .withPriority()
-                        .build()
-        );
+        TaskDtoRequest request = new TaskBuilder(SCANNER)
+                .withTitle()
+                .withDescription()
+                .withDeadline()
+                .withPriority()
+                .build();
+
+        TaskDtoResponse createdTask = TASKSERVICE.createTask(request);
+
         System.out.println("\n✅ Task created successfully!");
         System.out.println(createdTask);
     }
@@ -42,7 +46,7 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
             System.out.println(ex.getMessage());
         }
     }
-    private void printTasks(String title, List<Task> tasks, String emptyMessage) {
+    private void printTasks(String title, List<TaskDtoResponse> tasks, String emptyMessage) {
         if (tasks == null || tasks.isEmpty()) {
             System.out.println("\n⚠️ " + emptyMessage);
             return;

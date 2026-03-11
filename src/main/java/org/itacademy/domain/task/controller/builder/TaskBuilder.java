@@ -1,35 +1,41 @@
 package org.itacademy.domain.task.controller.builder;
 
+import org.itacademy.domain.task.dto.TaskDtoRequest;
 import org.itacademy.domain.task.exception.InvalidDateException;
 import org.itacademy.domain.task.exception.TitleInBlankException;
 import org.itacademy.domain.task.model.Priority;
-import org.itacademy.domain.task.model.Task;
+import org.itacademy.domain.task.model.Status;
 import org.itacademy.input.InputReader;
 
 import java.time.LocalDate;
 
 public class TaskBuilder {
+
     private final InputReader scanner;
+
     private String title;
     private String description;
     private LocalDate deadline;
-    private Priority priority;
+    private Priority priority = Priority.MIDDLE;
 
     public TaskBuilder(InputReader scanner) {
         this.scanner = scanner;
     }
 
     public TaskBuilder withTitle() {
+
         while (true) {
             try {
-                String inputTitle = scanner.readString("Please, write the title of the task");
+
+                String inputTitle = scanner.readString("Please write the task title:");
 
                 if (inputTitle == null || inputTitle.isBlank()) {
-                    throw new TitleInBlankException("Error: The title cannot be empty or blank.");
+                    throw new TitleInBlankException("Error: Title cannot be empty.");
                 }
 
-                this.title = inputTitle;
+                this.title = inputTitle.trim();
                 return this;
+
             } catch (TitleInBlankException e) {
                 System.out.println(e.getMessage());
             }
@@ -37,65 +43,81 @@ public class TaskBuilder {
     }
 
     public TaskBuilder withDescription() {
-        if (scanner.readYesNo("Do you want to describe the task?")) {
-            this.description = scanner.readString("Please, write the description of the task");
+
+        if (scanner.readYesNo("Do you want to add a description?")) {
+            this.description = scanner.readString("Write the description:");
         }
+
         return this;
     }
 
     public TaskBuilder withDeadline() {
-        if (scanner.readYesNo("Does the task have deadline?")) {
+
+        if (scanner.readYesNo("Does the task have a deadline?")) {
             this.deadline = readValidDate();
         }
+
         return this;
     }
 
     public TaskBuilder withPriority() {
-        boolean priorityChose = scanner.readYesNo("Do you want to define the priority?");
-        if (priorityChose) {
-            this.priority = setPriority();
-        } else {
-            this.priority = Priority.MIDDLE;
+
+        if (scanner.readYesNo("Do you want to define the priority?")) {
+            this.priority = readPriority();
         }
+
         return this;
     }
 
-    public Task build() {
-        return new Task(title, description, deadline, priority);
+    public TaskDtoRequest build() {
+
+        return new TaskDtoRequest(
+                title,
+                description,
+                deadline,
+                priority,
+                Status.NOT_COMPLETED
+        );
     }
 
     private LocalDate readValidDate() {
-        LocalDate inputDate = null;
+
         while (true) {
+
             try {
+
                 System.out.println("--- Enter Deadline ---");
-                int day = scanner.readInt("Enter day:");
-                int month = scanner.readInt("Enter month:");
-                int year = scanner.readInt("Enter year:");
 
-                inputDate = LocalDate.of(year, month, day);
+                int day = scanner.readInt("Day:");
+                int month = scanner.readInt("Month:");
+                int year = scanner.readInt("Year:");
 
-                if (inputDate.isBefore(LocalDate.now())) {
+                LocalDate date = LocalDate.of(year, month, day);
+
+                if (date.isBefore(LocalDate.now())) {
                     throw new InvalidDateException("Date cannot be in the past.");
                 }
-                return inputDate;
+
+                return date;
 
             } catch (java.time.DateTimeException e) {
-                System.out.println("Invalid date: That day doesn't exist in the calendar. Try again.");
+                System.out.println("Invalid date. That day does not exist.");
             } catch (InvalidDateException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private Priority setPriority() {
+    private Priority readPriority() {
 
-        return switch (scanner.readInt("""
-                Choose the priority:
-                1. Low
-                2. Middle
-                3. High
-                """)) {
+        int option = scanner.readInt("""
+                Choose priority:
+                1. LOW
+                2. MIDDLE
+                3. HIGH
+                """);
+
+        return switch (option) {
             case 1 -> Priority.LOW;
             case 3 -> Priority.HIGH;
             default -> Priority.MIDDLE;
