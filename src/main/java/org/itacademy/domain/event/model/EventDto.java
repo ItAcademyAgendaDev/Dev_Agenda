@@ -1,4 +1,5 @@
 package org.itacademy.domain.event.model;
 
-public record EventDto() {
-}
+import java.time.LocalDate;
+
+public record EventDto(Long id, String title, String description, LocalDate eventDate) {}

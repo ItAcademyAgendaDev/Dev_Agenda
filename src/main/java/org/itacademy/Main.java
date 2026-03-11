@@ -14,5 +14,6 @@ public class Main {
 
         DatabaseMigration.migrate(url, user, password);
         Connection connection = DatabaseConnectionFactory.createConnection(url, user, password);
+
     }
 }

@@ -1,11 +1,9 @@
-package org.itacademy.domain.event.controller;
+package org.itacademy.domain.event;
 
-import org.itacademy.domain.event.model.Event;
 import org.itacademy.domain.event.model.EventDto;
 import org.itacademy.domain.event.service.EventService;
 import org.itacademy.input.InputReader;
 
-import java.net.StandardSocketOptions;
 import java.time.LocalDate;
 
 public record MenuEvent (InputReader scanner, EventService eventService) {
