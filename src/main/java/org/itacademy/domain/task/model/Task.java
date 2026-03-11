@@ -100,28 +100,4 @@ public class Task {
     public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
-
-    @Override
-    public String toString() {
-        return String.format(
-                """
-                TASK [#%d]
-                ---------------------------
-                Title:       %s
-                Status:      [%s]
-                Priority:    %s
-                Created:     %s
-                Deadline:    %s
-                Description: %s
-                ---------------------------
-                """,
-                id,
-                title,
-                status,
-                priority,
-                creationDate,
-                (deadline != null ? deadline : "No deadline"),
-                (description != null ? description : "N/A")
-        );
     }
-}
