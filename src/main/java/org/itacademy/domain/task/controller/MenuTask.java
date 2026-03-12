@@ -6,7 +6,6 @@ import org.itacademy.domain.task.dto.TaskDtoRequest;
 import org.itacademy.domain.task.dto.TaskDtoResponse;
 import org.itacademy.domain.task.exception.TaskAlreadyCompletedException;
 import org.itacademy.domain.task.exception.TaskNotFoundException;
-import org.itacademy.domain.task.model.Task;
 import org.itacademy.domain.task.service.TaskService;
 import org.itacademy.input.InputReader;
 
@@ -37,15 +36,28 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
     }
 
     public void markAsCompleted() {
-
+        getTasks();
         try {
-            Long id = (long) SCANNER.readInt("Enter the task id: ");
+            Long id = (long) SCANNER.readInt("Enter the task id you want to update: ");
             TASKSERVICE.markAsCompleted(id);
             System.out.println("Task marked as completed.");
         } catch (TaskNotFoundException | TaskAlreadyCompletedException ex) {
             System.out.println(ex.getMessage());
         }
     }
+
+    public void deleteTask() {
+        getTasks();
+        try {
+            if (!SCANNER.readYesNo("Are you sure you want to delete the task? ")) return;
+            Long id = (long) SCANNER.readInt("Enter the task id you want to delete: ");
+            TASKSERVICE.deleteTask(id);
+            System.out.println("Task deleted successfully!");
+        } catch (TaskNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     private void printTasks(String title, List<TaskDtoResponse> tasks, String emptyMessage) {
         if (tasks == null || tasks.isEmpty()) {
             System.out.println("\n⚠️ " + emptyMessage);

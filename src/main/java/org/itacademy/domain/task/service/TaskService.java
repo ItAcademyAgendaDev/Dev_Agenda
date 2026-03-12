@@ -43,4 +43,10 @@ public record TaskService(TaskRepository taskRepository) {
                 .map(TaskMapper::toDto)
                 .toList();
     }
+
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        taskRepository.deleteById(id);
+    }
 }

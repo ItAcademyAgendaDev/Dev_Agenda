@@ -16,4 +16,6 @@ public interface TaskRepository {
     void update(Task task);
 
     List<Task> findByStatus();
+
+    void deleteById(Long id);
 }
