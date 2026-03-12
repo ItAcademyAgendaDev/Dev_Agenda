@@ -3,8 +3,8 @@ package org.itacademy.domain.task.service;
 
 import org.itacademy.domain.task.dto.TaskDtoRequest;
 import org.itacademy.domain.task.dto.TaskDtoResponse;
-import org.itacademy.domain.task.exception.TaskAlreadyCompletedException;
-import org.itacademy.domain.task.exception.TaskNotFoundException;
+import org.itacademy.domain.exception.TaskAlreadyCompletedException;
+import org.itacademy.domain.exception.RequestNotFoundException;
 import org.itacademy.domain.task.mapper.TaskMapper;
 import org.itacademy.domain.task.model.Status;
 import org.itacademy.domain.task.model.Task;
@@ -28,7 +28,7 @@ public record TaskService(TaskRepository taskRepository) {
     public void markAsCompleted(Long id) {
 
         Task foundTask = taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+                .orElseThrow(() -> new RequestNotFoundException("Task not found"));
 
         if (foundTask.getStatus() == Status.COMPLETED) {
             throw new TaskAlreadyCompletedException("Task already completed");
@@ -46,7 +46,7 @@ public record TaskService(TaskRepository taskRepository) {
 
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+                .orElseThrow(() -> new RequestNotFoundException("Task not found"));
         taskRepository.deleteById(id);
     }
 }

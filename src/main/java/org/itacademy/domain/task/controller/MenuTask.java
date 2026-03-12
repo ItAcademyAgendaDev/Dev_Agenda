@@ -4,8 +4,8 @@ package org.itacademy.domain.task.controller;
 import org.itacademy.domain.task.controller.builder.TaskBuilder;
 import org.itacademy.domain.task.dto.TaskDtoRequest;
 import org.itacademy.domain.task.dto.TaskDtoResponse;
-import org.itacademy.domain.task.exception.TaskAlreadyCompletedException;
-import org.itacademy.domain.task.exception.TaskNotFoundException;
+import org.itacademy.domain.exception.TaskAlreadyCompletedException;
+import org.itacademy.domain.exception.RequestNotFoundException;
 import org.itacademy.domain.task.service.TaskService;
 import org.itacademy.input.InputReader;
 
@@ -42,7 +42,7 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
             Long id = (long) SCANNER.readInt("Enter the task id you want to update: ");
             TASKSERVICE.markAsCompleted(id);
             System.out.println("Task marked as completed.");
-        } catch (TaskNotFoundException | TaskAlreadyCompletedException ex) {
+        } catch (RequestNotFoundException | TaskAlreadyCompletedException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -54,7 +54,7 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
             Long id = (long) SCANNER.readInt("Enter the task id you want to delete: ");
             TASKSERVICE.deleteTask(id);
             System.out.println("Task deleted successfully!");
-        } catch (TaskNotFoundException ex) {
+        } catch (RequestNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
     }

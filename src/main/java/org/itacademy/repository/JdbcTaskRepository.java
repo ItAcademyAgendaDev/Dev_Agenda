@@ -1,7 +1,7 @@
 package org.itacademy.repository;
 
 
-import org.itacademy.domain.task.exception.TaskNotFoundException;
+import org.itacademy.domain.exception.RequestNotFoundException;
 import org.itacademy.domain.task.model.Priority;
 import org.itacademy.domain.task.model.Status;
 import org.itacademy.domain.task.model.Task;
@@ -32,7 +32,7 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 task.setId(rs.getLong(1));
-                return findById(task.getId()).orElseThrow(() -> new TaskNotFoundException("Error finding created task, task not found in database"));
+                return findById(task.getId()).orElseThrow(() -> new RequestNotFoundException("Error finding created task, task not found in database"));
             }
 
         } catch (SQLException e) {
