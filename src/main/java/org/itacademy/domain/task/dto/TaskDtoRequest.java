@@ -10,6 +10,7 @@ public class TaskDtoRequest {
     private String description;
     private LocalDate deadline;
     private Priority priority;
+    private Status status;
     private Long eventId;
 
     public TaskDtoRequest(String title, String description, LocalDate deadline, Priority priority, Status status, Long eventId) {
@@ -17,6 +18,7 @@ public class TaskDtoRequest {
         this.description = description;
         this.deadline = deadline;
         this.priority = priority;
+        this.status = status;
         this.eventId = eventId;
     }
 
@@ -38,5 +40,9 @@ public class TaskDtoRequest {
 
     public Long getEventId() {
         return eventId;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
