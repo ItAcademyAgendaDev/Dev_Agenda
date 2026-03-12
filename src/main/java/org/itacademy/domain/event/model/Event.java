@@ -12,7 +12,6 @@ public class Event {
     private String title;
     private String description;
     private LocalDate eventDate;
-    private List<Task> tasks;
 
     private Event(Builder builder) {
         this.id = builder.id;
@@ -44,5 +43,7 @@ public class Event {
 
 
     }
+
+
 
 }
