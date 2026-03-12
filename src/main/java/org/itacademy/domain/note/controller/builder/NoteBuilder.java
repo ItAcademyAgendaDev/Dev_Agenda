@@ -43,7 +43,7 @@ public class NoteBuilder {
         while (true) {
             int value = scanner.readInt("Please, enter the task id related to this note: ");
 
-            if (value <= 0) {
+            if (value<= 0) {
                 System.out.println("Task id must be greater than 0.");
             } else {
                 return (long) value;

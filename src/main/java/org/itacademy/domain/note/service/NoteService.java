@@ -6,7 +6,7 @@ import org.itacademy.domain.task.repository.TaskRepository;
 
 import java.util.List;
 
-public record NoteService(NoteRepository noteRepository, TaskRepository taskRepository) {
+public record NoteService(NoteRepository noteRepository) {
 
     public Note createNote(Note note) {
         if (taskRepository.findById(note.getTaskId()) == null) {
