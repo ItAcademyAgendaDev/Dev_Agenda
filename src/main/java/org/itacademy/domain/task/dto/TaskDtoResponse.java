@@ -27,6 +27,38 @@ public class TaskDtoResponse {
         this.eventId = eventId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Long getEventId() {
+        return eventId;
+    }
+
     @Override
     public String toString() {
         return String.format(

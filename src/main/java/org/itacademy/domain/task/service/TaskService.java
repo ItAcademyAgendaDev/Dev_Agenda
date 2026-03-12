@@ -45,7 +45,7 @@ public record TaskService(TaskRepository taskRepository) {
     }
 
     public void deleteTask(Long id) {
-        Task task = taskRepository.findById(id)
+        taskRepository.findById(id)
                 .orElseThrow(() -> new RequestNotFoundException("Task not found"));
         taskRepository.deleteById(id);
     }
