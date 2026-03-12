@@ -1,8 +1,8 @@
 package org.itacademy.domain.task.controller.builder;
 
 import org.itacademy.domain.task.dto.TaskDtoRequest;
-import org.itacademy.domain.task.exception.InvalidDateException;
-import org.itacademy.domain.task.exception.TitleInBlankException;
+import org.itacademy.domain.exception.InvalidDateException;
+import org.itacademy.domain.exception.TitleInBlankException;
 import org.itacademy.domain.task.model.Priority;
 import org.itacademy.domain.task.model.Status;
 import org.itacademy.input.InputReader;
