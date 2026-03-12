@@ -12,12 +12,13 @@ public class Task {
     private Status status;
     private Long eventId;
 
-    public Task(String title, String description, LocalDate deadline, Priority priority) {
+    public Task(String title, String description, LocalDate deadline, Priority priority, Long eventId) {
         this.title = title;
         this.description = description;
         this.deadline = deadline;
         this.priority = priority;
         this.status = Status.NOT_COMPLETED;
+        this.eventId = eventId;
     }
 
     public Task(
@@ -27,7 +28,8 @@ public class Task {
             LocalDate creationDate,
             LocalDate deadline,
             Priority priority,
-            Status status
+            Status status,
+            Long eventId
     ) {
         this.id = id;
         this.title = title;
@@ -36,6 +38,7 @@ public class Task {
         this.deadline = deadline;
         this.priority = priority;
         this.status = status;
+        this.eventId = eventId;
     }
 
 

@@ -76,5 +76,8 @@ public record MenuEvent (InputReader scanner, EventService eventService) {
         }
     }
 
+    public void getById(Long id) {
+        eventService.getById(id);
+    }
 
 }
