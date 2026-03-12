@@ -13,12 +13,13 @@ import java.util.List;
 
 public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
 
-    public void createTask() {
+    public void createTask(Long id) {
         TaskDtoRequest request = new TaskBuilder(SCANNER)
                 .withTitle()
                 .withDescription()
                 .withDeadline()
                 .withPriority()
+                .withEvent(id)
                 .build();
 
         TaskDtoResponse createdTask = TASKSERVICE.createTask(request);

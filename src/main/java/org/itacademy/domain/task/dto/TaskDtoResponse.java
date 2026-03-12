@@ -39,6 +39,7 @@ public class TaskDtoResponse {
                         Created:     %s
                         Deadline:    %s
                         Description: %s
+                        Event id:    %s
                         ---------------------------
                         """,
                 id,
@@ -47,7 +48,8 @@ public class TaskDtoResponse {
                 priority,
                 creationDate,
                 (deadline != null ? deadline : "No deadline"),
-                (description != null ? description : "N/A")
+                (description != null ? description : "N/A"),
+                (eventId != null ? eventId.toString() : "N/A")
         );
     }
 }

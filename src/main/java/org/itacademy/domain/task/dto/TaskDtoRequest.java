@@ -10,12 +10,14 @@ public class TaskDtoRequest {
     private String description;
     private LocalDate deadline;
     private Priority priority;
+    private Long eventId;
 
-    public TaskDtoRequest(String title, String description, LocalDate deadline, Priority priority, Status status) {
+    public TaskDtoRequest(String title, String description, LocalDate deadline, Priority priority, Status status, Long eventId) {
         this.title = title;
         this.description = description;
         this.deadline = deadline;
         this.priority = priority;
+        this.eventId = eventId;
     }
 
     public Priority getPriority() {
@@ -32,5 +34,9 @@ public class TaskDtoRequest {
 
     public String getTitle() {
         return title;
+    }
+
+    public Long getEventId() {
+        return eventId;
     }
 }

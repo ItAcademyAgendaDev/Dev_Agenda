@@ -17,6 +17,7 @@ public class TaskBuilder {
     private String description;
     private LocalDate deadline;
     private Priority priority = Priority.MIDDLE;
+    private Long eventId;
 
     public TaskBuilder(InputReader scanner) {
         this.scanner = scanner;
@@ -69,6 +70,11 @@ public class TaskBuilder {
         return this;
     }
 
+    public TaskBuilder withEvent(Long id ){
+        this.eventId = id;
+        return this;
+    }
+
     public TaskDtoRequest build() {
 
         return new TaskDtoRequest(
@@ -76,7 +82,8 @@ public class TaskBuilder {
                 description,
                 deadline,
                 priority,
-                Status.NOT_COMPLETED
+                Status.NOT_COMPLETED,
+                eventId
         );
     }
 

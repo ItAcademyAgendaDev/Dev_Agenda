@@ -17,7 +17,7 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
 
     @Override
     public Task save(Task task) {
-        String sql = "INSERT INTO task (title, description, deadline, priority, status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO task (title, description, deadline, priority, status, event_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, task.getTitle());
@@ -25,6 +25,7 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
             stmt.setObject(3, task.getDeadline());
             stmt.setString(4, task.getPriority().name());
             stmt.setString(5, task.getStatus().name());
+            stmt.setObject(6, task.getEventId());
 
             stmt.executeUpdate();
 
@@ -83,7 +84,7 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
 
     @Override
     public void update(Task task) {
-        String sql = "UPDATE task SET title = ?, description = ?, deadline = ?, priority = ?, status = ? WHERE id = ?";
+        String sql = "UPDATE task SET title = ?, description = ?, deadline = ?, priority = ?, status = ?, event_id = ? WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitle());
@@ -143,6 +144,6 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
 
     private Task mapRow(ResultSet rs) throws SQLException {
 
-        return new Task(rs.getLong("id"), rs.getString("title"), rs.getString("description"), rs.getObject("creation_date", LocalDate.class), rs.getObject("deadline", LocalDate.class), Priority.valueOf(rs.getString("priority")), Status.valueOf(rs.getString("status")));
+        return new Task(rs.getLong("id"), rs.getString("title"), rs.getString("description"), rs.getObject("creation_date", LocalDate.class), rs.getObject("deadline", LocalDate.class), Priority.valueOf(rs.getString("priority")), Status.valueOf(rs.getString("status")), rs.getLong("event_id"));
     }
 }

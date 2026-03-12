@@ -49,4 +49,8 @@ public record EventService(EventRepository eventRepository){
     private EventDto mapToDTO(Event event) {
         return new EventDto(event.getId(), event.getTitle(), event.getDescription(), event.getEventDate());
     }
+
+    public void getById(Long id) {
+        eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+    }
 }
