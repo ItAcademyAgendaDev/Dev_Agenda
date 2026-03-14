@@ -1,13 +1,17 @@
 package org.itacademy.menu;
 
 import org.itacademy.domain.event.MenuEvent;
+import org.itacademy.domain.note.controller.MenuNote;
 import org.itacademy.domain.task.controller.MenuTask;
 import org.itacademy.input.InputReader;
+
+import java.util.Scanner;
 
 public record AppMenu(
         InputReader scanner,
         MenuEvent menuEvent,
-        MenuTask menuTask
+        MenuTask menuTask,
+        MenuNote menuNote
 ) {
 
     public void start() {
@@ -18,7 +22,7 @@ public record AppMenu(
             switch (choice) {
                 case 1 -> MenuEventImpl.showMenu(scanner, menuEvent);
                 case 2 -> MenuTaskImpl.showMenu(scanner, menuTask, menuEvent);
-                //case 3 -> menuNote.showMenu();
+                case 3 -> MenuNoteImpl.showMenu(scanner, menuNote);
                 case 0 -> {
                     System.out.println("Exiting Agenda... Goodbye!");
                     return;
