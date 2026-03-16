@@ -5,11 +5,27 @@ import org.itacademy.domain.exception.TitleInBlankException;
 import org.itacademy.domain.note.dto.NoteDtoRequest;
 import org.itacademy.domain.note.dto.NoteDtoResponse;
 import org.itacademy.domain.note.service.NoteService;
+import org.itacademy.input.ConsoleInputReader;
 import org.itacademy.input.InputReader;
 
 import java.util.List;
 
-public record MenuNote(InputReader scanner, NoteService noteService) {
+public class MenuNote {
+    private static MenuNote instance;
+    private final ConsoleInputReader scanner;
+    private final NoteService noteService;
+
+    private MenuNote(ConsoleInputReader scanner, NoteService noteService) {
+        this.scanner = scanner;
+        this.noteService = noteService;
+    }
+
+    public static MenuNote getInstance(ConsoleInputReader scanner, NoteService noteService) {
+        if (instance == null) {
+            instance = new MenuNote(scanner, noteService);
+        }
+        return instance;
+    }
 
     public void createNote() {
         try {

@@ -7,11 +7,27 @@ import org.itacademy.domain.note.dto.NoteDtoResponse;
 import org.itacademy.domain.note.mapper.NoteMapper;
 import org.itacademy.domain.note.model.Note;
 import org.itacademy.domain.note.repository.NoteRepository;
+import org.itacademy.domain.task.model.Task;
 import org.itacademy.domain.task.repository.TaskRepository;
 
 import java.util.List;
 
-public record NoteService(NoteRepository noteRepository, TaskRepository taskRepository) {
+public class NoteService {
+    private static NoteService instance;
+    private final NoteRepository noteRepository;
+    private final TaskRepository taskRepository;
+
+    private NoteService(NoteRepository noteRepository, TaskRepository taskRepository) {
+        this.noteRepository = noteRepository;
+        this.taskRepository = taskRepository;
+    }
+
+    public static NoteService getInstance(NoteRepository noteRepository, TaskRepository taskRepository){
+        if(instance == null){
+            instance = new NoteService(noteRepository, taskRepository);
+        }
+        return instance;
+    }
 
     public NoteDtoResponse createNote(NoteDtoRequest request) {
         validateDescription(request.getDescription());
