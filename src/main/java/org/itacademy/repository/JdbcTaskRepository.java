@@ -13,7 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record JdbcTaskRepository(Connection connection) implements TaskRepository {
+public class JdbcTaskRepository implements TaskRepository {
+    private static JdbcTaskRepository instance;
+    private final Connection connection;
+
+    private JdbcTaskRepository(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static JdbcTaskRepository getInstance(Connection connection){
+        if(instance == null){
+            instance = new JdbcTaskRepository(connection);
+        }
+        return instance;
+    }
 
     @Override
     public Task save(Task task) {

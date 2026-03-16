@@ -3,10 +3,18 @@ package org.itacademy.input;
 import java.util.Scanner;
 
 public class ConsoleInputReader implements InputReader {
+    public static ConsoleInputReader instance;
     private final Scanner scanner;
 
-    public ConsoleInputReader() {
+    private ConsoleInputReader() {
         this.scanner = new Scanner(System.in);
+    }
+
+    public static ConsoleInputReader getInstance(){
+        if (instance == null){
+            instance = new ConsoleInputReader();
+        }
+        return instance;
     }
 
     @Override

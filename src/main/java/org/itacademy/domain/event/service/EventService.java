@@ -7,10 +7,26 @@ import org.itacademy.domain.event.repository.EventRepository;
 import org.itacademy.domain.task.dto.TaskDtoResponse;
 import org.itacademy.domain.task.mapper.TaskMapper;
 import org.itacademy.domain.task.repository.TaskRepository;
+import org.itacademy.domain.task.service.TaskService;
 
 import java.util.List;
 
-public record EventService(EventRepository eventRepository, TaskRepository taskRepository){
+public class EventService {
+    private static EventService instance;
+    private final EventRepository eventRepository;
+    private final TaskRepository taskRepository;
+
+    private EventService(EventRepository eventRepository, TaskRepository taskRepository1) {
+        this.eventRepository = eventRepository;
+        this.taskRepository = taskRepository1;
+    }
+
+    public static EventService getInstance(EventRepository eventRepository, TaskRepository taskRepository) {
+        if (instance == null) {
+            instance = new EventService(eventRepository, taskRepository);
+        }
+        return instance;
+    }
 
     public EventDto createEvent(EventDto eventDto){
         Event event = new Event.Builder()

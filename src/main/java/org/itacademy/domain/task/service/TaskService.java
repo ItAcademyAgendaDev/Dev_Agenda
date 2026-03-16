@@ -12,7 +12,20 @@ import org.itacademy.domain.task.repository.TaskRepository;
 
 import java.util.List;
 
-public record TaskService(TaskRepository taskRepository) {
+public class TaskService {
+    private static TaskService instance;
+    private final TaskRepository taskRepository;
+
+    private TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    public static TaskService getInstance(TaskRepository taskRepository){
+        if (instance == null){
+            instance = new TaskService(taskRepository);
+        }
+        return instance;
+    }
 
     public TaskDtoResponse createTask(TaskDtoRequest taskDtoRequest) {
         Task task = TaskMapper.toEntity(taskDtoRequest);

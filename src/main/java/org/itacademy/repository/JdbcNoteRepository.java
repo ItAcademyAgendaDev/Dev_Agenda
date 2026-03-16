@@ -9,7 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record JdbcNoteRepository(Connection connection) implements NoteRepository {
+public class JdbcNoteRepository implements NoteRepository {
+    private static JdbcNoteRepository instance;
+    private final Connection connection;
+
+    private JdbcNoteRepository(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static JdbcNoteRepository getInstance(Connection connection){
+        if(instance == null){
+            instance = new JdbcNoteRepository(connection);
+        }
+        return instance;
+    }
 
     @Override
     public Note save(Note note) {
