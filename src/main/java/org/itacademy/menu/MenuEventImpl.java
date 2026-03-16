@@ -1,6 +1,7 @@
 package org.itacademy.menu;
 
 import org.itacademy.domain.event.MenuEvent;
+import org.itacademy.domain.task.controller.MenuTask;
 import org.itacademy.input.InputReader;
 
 public record MenuEventImpl() {
@@ -13,6 +14,7 @@ public record MenuEventImpl() {
                     2. List All Events
                     3. Update Event
                     4. Delete Event
+                    5. Show Events with Tasks
                     0. Back to Main Menu
                     """);
 
@@ -22,6 +24,7 @@ public record MenuEventImpl() {
                 case 2 -> menuEvent.displayAllEvents();
                 case 3 -> menuEvent.updateEvent();
                 case 4 -> menuEvent.deleteEvent();
+                case 5 -> menuEvent.showEventDetailsWithTasks();
                 case 0 -> {
                     return;
                 }
