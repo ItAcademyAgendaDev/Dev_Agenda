@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS note (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(255) NOT NULL,
+    creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    task_id BIGINT NOT NULL,
+
+    CONSTRAINT fk_note_task
+        FOREIGN KEY (task_id)
+        REFERENCES task(id)
+        ON DELETE CASCADE
+        );
+)
