@@ -1,6 +1,7 @@
 package org.itacademy.domain.event;
 
 import org.itacademy.domain.event.model.EventDto;
+import org.itacademy.domain.event.model.EventWithTasksDto;
 import org.itacademy.domain.event.service.EventService;
 import org.itacademy.input.InputReader;
 
@@ -79,5 +80,17 @@ public record MenuEvent (InputReader scanner, EventService eventService) {
     public void getById(Long id) {
         eventService.getById(id);
     }
+
+    public void showEventDetailsWithTasks() {
+        Long id = (long) scanner.readInt("Introduce event id: ");
+
+        try {
+            EventWithTasksDto detail = eventService.getEventWithTasks(id);
+            System.out.println(detail);
+        } catch (RuntimeException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
 
 }

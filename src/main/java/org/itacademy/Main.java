@@ -37,8 +37,8 @@ public class Main {
         TaskRepository taskRepository = new JdbcTaskRepository(connection);
         NoteRepository noteRepository = new JdbcNoteRepository(connection);
 
-        EventService eventService = new EventService(eventRepository);
         TaskService taskService = new TaskService(taskRepository);
+        EventService eventService = new EventService(eventRepository, taskRepository);
         NoteService noteService = new NoteService(noteRepository, taskRepository);
 
         MenuEvent menuEvent = new MenuEvent(scanner, eventService);

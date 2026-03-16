@@ -2,11 +2,15 @@ package org.itacademy.domain.event.service;
 
 import org.itacademy.domain.event.model.Event;
 import org.itacademy.domain.event.model.EventDto;
+import org.itacademy.domain.event.model.EventWithTasksDto;
 import org.itacademy.domain.event.repository.EventRepository;
+import org.itacademy.domain.task.dto.TaskDtoResponse;
+import org.itacademy.domain.task.mapper.TaskMapper;
+import org.itacademy.domain.task.repository.TaskRepository;
 
 import java.util.List;
 
-public record EventService(EventRepository eventRepository){
+public record EventService(EventRepository eventRepository, TaskRepository taskRepository){
 
     public EventDto createEvent(EventDto eventDto){
         Event event = new Event.Builder()
@@ -52,5 +56,20 @@ public record EventService(EventRepository eventRepository){
 
     public void getById(Long id) {
         eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+    }
+
+    public EventWithTasksDto getEventWithTasks(Long eventId) {
+        EventDto event = eventRepository.findById(eventId)
+                .map(this::mapToDTO)
+                .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+
+        List<TaskDtoResponse> tasks = taskRepository.findByEventId(eventId).stream()
+                .map(TaskMapper::toDto)
+                .toList();
+
+        return new EventWithTasksDto(
+                event,
+                tasks
+        );
     }
 }

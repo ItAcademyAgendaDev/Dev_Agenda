@@ -70,4 +70,7 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
         System.out.println("====================\n");
     }
 
+    public void getTaskByEvent() {
+
+    }
 }
