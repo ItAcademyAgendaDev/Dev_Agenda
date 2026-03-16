@@ -3,12 +3,17 @@ package org.itacademy;
 import org.itacademy.domain.event.MenuEvent;
 import org.itacademy.domain.event.repository.EventRepository;
 import org.itacademy.domain.event.service.EventService;
+import org.itacademy.domain.note.controller.MenuNote;
+import org.itacademy.domain.note.repository.NoteRepository;
+import org.itacademy.domain.note.service.NoteService;
 import org.itacademy.domain.task.controller.MenuTask;
 import org.itacademy.domain.task.repository.TaskRepository;
 import org.itacademy.domain.task.service.TaskService;
 import org.itacademy.input.ConsoleInputReader;
+import org.itacademy.input.InputReader;
 import org.itacademy.menu.AppMenu;
 import org.itacademy.repository.JdbcEventRepository;
+import org.itacademy.repository.JdbcNoteRepository;
 import org.itacademy.repository.JdbcTaskRepository;
 import org.itacademy.repository.config.DatabaseConnectionFactory;
 import org.itacademy.repository.config.DatabaseMigration;
@@ -16,6 +21,7 @@ import org.itacademy.repository.config.DatabaseMigration;
 import java.sql.Connection;
 
 public class Main {
+
     public static void main(String[] args) {
 
         String url = "jdbc:mysql://localhost:3315/agenda_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
@@ -25,33 +31,21 @@ public class Main {
         DatabaseMigration.migrate(url, user, password);
         Connection connection = DatabaseConnectionFactory.createConnection(url, user, password);
 
-        EventRepository jdbcEventRepository = new JdbcEventRepository(connection);
-        MenuEvent menuEvent = new MenuEvent(new ConsoleInputReader(), new EventService(jdbcEventRepository));
+        InputReader scanner = new ConsoleInputReader();
 
-        TaskRepository jdbcTaskRepository = new JdbcTaskRepository(connection);
-        MenuTask menuTask = new MenuTask(new ConsoleInputReader(), new TaskService(jdbcTaskRepository));
+        EventRepository eventRepository = new JdbcEventRepository(connection);
+        TaskRepository taskRepository = new JdbcTaskRepository(connection);
+        NoteRepository noteRepository = new JdbcNoteRepository(connection);
 
-        AppMenu commonMenu = new AppMenu(new ConsoleInputReader(), menuEvent, menuTask);
-        commonMenu.start();
+        EventService eventService = new EventService(eventRepository);
+        TaskService taskService = new TaskService(taskRepository);
+        NoteService noteService = new NoteService(noteRepository, taskRepository);
 
+        MenuEvent menuEvent = new MenuEvent(scanner, eventService);
+        MenuTask menuTask = new MenuTask(scanner, taskService);
+        MenuNote menuNote = new MenuNote(scanner, noteService);
 
-
-
-
-
-        System.out.println("Añadir evento");
-        menuEvent.createEvent();
-        System.out.println("añadir tarea al evento");
-
-
-
-        // while (){menu.createTask(event1.getId()));
-
-
-
-
-
-
-
+        AppMenu appMenu = new AppMenu(scanner, menuEvent, menuTask, menuNote);
+        appMenu.start();
     }
 }
