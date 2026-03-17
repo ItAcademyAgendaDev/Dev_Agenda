@@ -7,6 +7,7 @@ import org.itacademy.domain.note.service.NoteService;
 import org.itacademy.domain.task.controller.MenuTask;
 import org.itacademy.domain.task.service.TaskService;
 import org.itacademy.input.ConsoleInputReader;
+import org.itacademy.input.InputReader;
 import org.itacademy.menu.AppMenu;
 import org.itacademy.repository.JdbcEventRepository;
 import org.itacademy.repository.JdbcNoteRepository;
