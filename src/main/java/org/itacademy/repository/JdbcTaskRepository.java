@@ -13,7 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record JdbcTaskRepository(Connection connection) implements TaskRepository {
+public class JdbcTaskRepository implements TaskRepository {
+    private static JdbcTaskRepository instance;
+    private final Connection connection;
+
+    private JdbcTaskRepository(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static JdbcTaskRepository getInstance(Connection connection){
+        if(instance == null){
+            instance = new JdbcTaskRepository(connection);
+        }
+        return instance;
+    }
 
     @Override
     public Task save(Task task) {
@@ -145,5 +158,24 @@ public record JdbcTaskRepository(Connection connection) implements TaskRepositor
     private Task mapRow(ResultSet rs) throws SQLException {
 
         return new Task(rs.getLong("id"), rs.getString("title"), rs.getString("description"), rs.getObject("creation_date", LocalDate.class), rs.getObject("deadline", LocalDate.class), Priority.valueOf(rs.getString("priority")), Status.valueOf(rs.getString("status")), rs.getLong("event_id"));
+    }
+
+    public List<Task> findByEventId(Long eventId) {
+        String sql = "SELECT * FROM task WHERE event_id = ?";
+        List<Task> tasks = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, eventId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                tasks.add(mapRow(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error: " + eventId, e);
+        }
+        return tasks;
     }
 }

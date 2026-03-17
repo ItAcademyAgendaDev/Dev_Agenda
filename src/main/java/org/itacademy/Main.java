@@ -1,13 +1,10 @@
 package org.itacademy;
 
 import org.itacademy.domain.event.MenuEvent;
-import org.itacademy.domain.event.repository.EventRepository;
 import org.itacademy.domain.event.service.EventService;
 import org.itacademy.domain.note.controller.MenuNote;
-import org.itacademy.domain.note.repository.NoteRepository;
 import org.itacademy.domain.note.service.NoteService;
 import org.itacademy.domain.task.controller.MenuTask;
-import org.itacademy.domain.task.repository.TaskRepository;
 import org.itacademy.domain.task.service.TaskService;
 import org.itacademy.input.ConsoleInputReader;
 import org.itacademy.input.InputReader;
@@ -31,21 +28,31 @@ public class Main {
         DatabaseMigration.migrate(url, user, password);
         Connection connection = DatabaseConnectionFactory.createConnection(url, user, password);
 
-        InputReader scanner = new ConsoleInputReader();
+        AppMenu.getInstance(
+                ConsoleInputReader.getInstance(),
 
-        EventRepository eventRepository = new JdbcEventRepository(connection);
-        TaskRepository taskRepository = new JdbcTaskRepository(connection);
-        NoteRepository noteRepository = new JdbcNoteRepository(connection);
+                MenuEvent.getInstance(
+                        ConsoleInputReader.getInstance(),
+                        EventService.getInstance(
+                                JdbcEventRepository.getInstance(connection),
+                                JdbcTaskRepository.getInstance(connection)
+                        )
+                ),
 
-        EventService eventService = new EventService(eventRepository);
-        TaskService taskService = new TaskService(taskRepository);
-        NoteService noteService = new NoteService(noteRepository, taskRepository);
+                MenuTask.getInstance(
+                        ConsoleInputReader.getInstance(),
+                        TaskService.getInstance(
+                                JdbcTaskRepository.getInstance(connection)
+                        )
+                ),
 
-        MenuEvent menuEvent = new MenuEvent(scanner, eventService);
-        MenuTask menuTask = new MenuTask(scanner, taskService);
-        MenuNote menuNote = new MenuNote(scanner, noteService);
-
-        AppMenu appMenu = new AppMenu(scanner, menuEvent, menuTask, menuNote);
-        appMenu.start();
+                MenuNote.getInstance(
+                        ConsoleInputReader.getInstance(),
+                        NoteService.getInstance(
+                                JdbcNoteRepository.getInstance(connection),
+                                JdbcTaskRepository.getInstance(connection)
+                        )
+                )
+        ).start();
     }
 }

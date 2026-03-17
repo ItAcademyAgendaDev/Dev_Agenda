@@ -1,13 +1,28 @@
 package org.itacademy.domain.event;
 
 import org.itacademy.domain.event.model.EventDto;
+import org.itacademy.domain.event.model.EventWithTasksDto;
 import org.itacademy.domain.event.service.EventService;
 import org.itacademy.input.InputReader;
 
 import java.time.LocalDate;
 
-public record MenuEvent (InputReader scanner, EventService eventService) {
+public class MenuEvent {
+    private static MenuEvent instance;
+    private final InputReader scanner;
+    private final EventService eventService;
 
+    private MenuEvent(InputReader scanner, EventService eventService) {
+        this.scanner = scanner;
+        this.eventService = eventService;
+    }
+
+    public static MenuEvent getInstance(InputReader scanner, EventService eventService) {
+        if (instance == null) {
+            instance = new MenuEvent(scanner, eventService);
+        }
+        return instance;
+    }
     public EventDto createEvent(){
         String title = scanner.readString("Enter event title: ");
         String description = scanner.readYesNo("Do you want to add description") ? scanner.readString("Enter description")
@@ -15,9 +30,9 @@ public record MenuEvent (InputReader scanner, EventService eventService) {
 
         System.out.println("Select the event date:");
         LocalDate eventDate = LocalDate.of(
-                scanner().readInt("Year: "),
-                scanner().readInt("Month: "),
-                scanner().readInt("Day: ")
+                scanner.readInt("Year: "),
+                scanner.readInt("Month: "),
+                scanner.readInt("Day: ")
         );
 
         EventDto requestEvent = new EventDto(null, title, description, eventDate);
@@ -37,9 +52,9 @@ public record MenuEvent (InputReader scanner, EventService eventService) {
         String newDesc = scanner.readString("New description: ");
         System.out.println("Enter new date: ");
         LocalDate newDate = LocalDate.of(
-                scanner().readInt("Enter new Year: "),
-                scanner().readInt("Enter new month: "),
-                scanner().readInt("Enter new day: ")
+                scanner.readInt("Enter new Year: "),
+                scanner.readInt("Enter new month: "),
+                scanner.readInt("Enter new day: ")
         );
 
         try {
@@ -79,5 +94,17 @@ public record MenuEvent (InputReader scanner, EventService eventService) {
     public void getById(Long id) {
         eventService.getById(id);
     }
+
+    public void showEventDetailsWithTasks() {
+        Long id = (long) scanner.readInt("Introduce event id: ");
+
+        try {
+            EventWithTasksDto detail = eventService.getEventWithTasks(id);
+            System.out.println(detail);
+        } catch (RuntimeException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
 
 }

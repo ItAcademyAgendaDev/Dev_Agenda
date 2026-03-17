@@ -8,9 +8,23 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public record JdbcEventRepository (Connection connection) implements EventRepository {
+public class JdbcEventRepository implements EventRepository {
+    private static JdbcEventRepository instance;
+    private final Connection connection;
+
+    private JdbcEventRepository(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static JdbcEventRepository getInstance(Connection connection){
+        if(instance == null){
+            instance = new JdbcEventRepository(connection);
+        }
+        return instance;
+    }
 
     @Override
     public Event save(Event event) {

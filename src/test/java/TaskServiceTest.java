@@ -25,8 +25,8 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        taskRepository = mock(TaskRepository.class); // el mock NO puede ser null
-        taskService = new TaskService(taskRepository);
+        taskRepository = mock(TaskRepository.class);
+        taskService = TaskService.getInstance(taskRepository);
     }
 
     @Test

@@ -1,17 +1,32 @@
 package org.itacademy.domain.task.controller;
 
 
+import org.itacademy.domain.exception.RequestNotFoundException;
+import org.itacademy.domain.exception.TaskAlreadyCompletedException;
 import org.itacademy.domain.task.controller.builder.TaskBuilder;
 import org.itacademy.domain.task.dto.TaskDtoRequest;
 import org.itacademy.domain.task.dto.TaskDtoResponse;
-import org.itacademy.domain.exception.TaskAlreadyCompletedException;
-import org.itacademy.domain.exception.RequestNotFoundException;
 import org.itacademy.domain.task.service.TaskService;
 import org.itacademy.input.InputReader;
 
 import java.util.List;
 
-public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
+public class MenuTask {
+    private static MenuTask instance;
+    private final InputReader SCANNER;
+    private final TaskService TASKSERVICE;
+
+    private MenuTask(InputReader scanner, TaskService taskService) {
+        SCANNER = scanner;
+        TASKSERVICE = taskService;
+    }
+
+    public static MenuTask getInstance(InputReader scanner, TaskService taskService) {
+        if (instance == null) {
+            instance = new MenuTask(scanner, taskService);
+        }
+        return instance;
+    }
 
     public void createTask(Long id) {
         TaskDtoRequest request = new TaskBuilder(SCANNER)
@@ -70,4 +85,7 @@ public record MenuTask(InputReader SCANNER, TaskService TASKSERVICE) {
         System.out.println("====================\n");
     }
 
+    public void getTaskByEvent() {
+
+    }
 }
